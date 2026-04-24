@@ -33,3 +33,8 @@ jobs:
       - name: Install dotenv
         run: |
          pip install python-dotenv
+         
+      - name: lancer le test
+        run: |
+         python -m src.main 
+         pytest

@@ -26,7 +26,4 @@ jobs:
           pip install -r requirements.txt
       - name: lancer les tests
         run: pytest
-      - name: configurer
-        run: |
-          echo ${{vars.CONF_VARIABLE}}
-          echo ${{secrets.DEMO}}
+     

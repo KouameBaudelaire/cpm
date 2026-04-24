@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Cloner le repo
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Installer Python
         uses: actions/setup-python@v5

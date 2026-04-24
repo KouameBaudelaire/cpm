@@ -1,6 +1,8 @@
 name: Python CI
 
 on: 
+  schedule:
+    - cron: '0 8 * * *'
   workflow_dispatch:
    inputs:
       nom:
@@ -57,13 +59,10 @@ jobs:
 
       - name: Afficher la date et l'heure complète
         run: |
-          echo "=================================="
-          echo "       HORLOGE QUOTIDIENNE        "
-          echo "=================================="
-          echo "  Date    : $(date +'%d/%m/%Y')"
-          echo "  Heure   : $(date +'%H')"
-          echo "  Minute  : $(date +'%M')"
-          echo "  Seconde : $(date +'%S')"
-          echo "=================================="
-          echo "  Il est : $(date + '%H:%M:%S le %d/%m/%Y')"
-          echo "=================================="
+          python3 -c "
+          from datetime import datetime
+          maintenant = datetime.now()
+          heure = maintenant.strftime('%H:%M:%S')
+          date  = maintenant.strftime('%d/%m/%Y')
+          print(f'Il est : {heure} et la date : {date}')
+          "

@@ -26,7 +26,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Configurer variables secretes
-          run: |
+        run: |
             echo "${{vars.CONF_VARIABLE}}"
             echo "${{secret.DEMO}}"
      

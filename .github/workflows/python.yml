@@ -60,7 +60,10 @@ jobs:
           echo "=================================="
           echo "       HORLOGE QUOTIDIENNE        "
           echo "=================================="
-        
+          echo "  Date    : $(date +'%d/%m/%Y')"
+          echo "  Heure   : $(date +'%H')"
+          echo "  Minute  : $(date +'%M')"
+          echo "  Seconde : $(date +'%S')"
           echo "=================================="
-          echo "  Il est : $(date + '%H:%M:%S %d/%m/%Y')"
+          echo "  Il est : $(date + '%H:%M:%S le %d/%m/%Y')"
           echo "=================================="

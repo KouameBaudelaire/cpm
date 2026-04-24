@@ -64,5 +64,5 @@ jobs:
           maintenant = datetime.now()
           heure = maintenant.strftime('%H:%M:%S')
           date  = maintenant.strftime('%d/%m/%Y')
-          print(f'Il est : {heure} et la date : {date}')
+          print(f'Il est : {heure} et le : {date}')
           "

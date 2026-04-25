@@ -28,7 +28,7 @@ jobs:
       run: |
         echo ${{vars.VERSION}}
   prod_env:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-lates
     needs: dev_env
     environment: prod
     steps:

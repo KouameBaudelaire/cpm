@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   no_env: 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-lates
     steps:
     - name: Valeur environnement
       run: |

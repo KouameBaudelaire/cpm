@@ -46,7 +46,7 @@ jobs:
         echo ${{vars.CONFIG_VARIABLE}}
         
     - name: Artifact downloader
-      uses: uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4
       with:
         name: build-artifact
         path: resultat.txt

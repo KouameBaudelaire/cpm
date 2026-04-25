@@ -46,7 +46,7 @@ jobs:
         echo ${{vars.CONFIG_VARIABLE}}
         
     - name: Artifact downloader
-      uses: bettermarks/action-artifact-download@0.5.1
+      uses: uses: actions/upload-artifact@v4
       with:
         name: build-artifact
         path: resultat.txt

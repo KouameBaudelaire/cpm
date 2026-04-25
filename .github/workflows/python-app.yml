@@ -49,4 +49,4 @@ jobs:
       uses: bettermarks/action-artifact-download@0.5.1
       with:
         name: build-artifact
-        path: dist
+        path: resultat.txt

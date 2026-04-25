@@ -44,6 +44,8 @@ jobs:
     - name: Valeur environnement
       run: |
         echo ${{vars.CONFIG_VARIABLE}}
+    - name: Créer fichier
+      run: echo "Hello Artifact" > resultat.txt
         
     - name: Artifact downloader
       uses: actions/upload-artifact@v4

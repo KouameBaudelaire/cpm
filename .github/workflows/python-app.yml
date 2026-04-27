@@ -20,6 +20,15 @@ jobs:
     - name: Valeur environnement
       run: |
         echo ${{vars.VERSION}}
+        echo ${{vars.VERSION}} > version.txt
+#save le contenu de version
+
+    - name: sauvegarder la valeur de version
+      uses: actions/upload-artifact@v4
+     with:
+       name: version-no-env
+       path: version.txt
+       
   dev_env:
     runs-on: ubuntu-latest
     needs: no_env
@@ -46,9 +55,9 @@ jobs:
         echo ${{vars.CONFIG_VARIABLE}}
     - name: Créer fichier
       run: echo "Hello Artifact" > resultat.txt
-        
-    - name: Artifact downloader
-      uses: actions/upload-artifact@v4
+
+    - name: Artifact downloader no_env
+      uses: actions/download-artifact@v4
       with:
-        name: build-artifact
+        name: version-no-env
         path: resultat.txt

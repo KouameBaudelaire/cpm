@@ -23,9 +23,9 @@ jobs:
         
     - name: sauvegarder la valeur de version
       uses: actions/upload-artifact@v4
-    with:
-    - name: version no-env
-      path: version.txt
+      with:
+        name: version no-env
+        path: version.txt
        
   dev_env:
     runs-on: ubuntu-latest
@@ -56,8 +56,8 @@ jobs:
 
     - name: Artifact downloader no_env
       uses: actions/download-artifact@v4
-    with:
-      - name: version no-env
+      with:
+        name: version no-env
         path: .
-      - name: afficher la valeur recup
+    - name: afficher la valeur recup
       run: cat version.txt

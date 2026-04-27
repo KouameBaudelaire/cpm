@@ -21,7 +21,6 @@ jobs:
       run: |
         echo ${{vars.VERSION}} > version.txt
         
-#save le contenu de version
     - name: sauvegarder la valeur de version
       uses: actions/upload-artifact@v4
      with:
@@ -53,7 +52,7 @@ jobs:
       run: |
         echo ${{vars.CONFIG_VARIABLE}}
     - name: Créer fichier
-      run: echo "Hello Artifact" > resultat.txt
+      run: echo "Hello Artifact"
 
     - name: Artifact downloader no_env
       uses: actions/download-artifact@v4

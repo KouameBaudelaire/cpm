@@ -57,7 +57,7 @@ jobs:
     - name: Artifact downloader no_env
       uses: actions/download-artifact@v4
       with:
-        name: version-no-env
+        name: version no-env
         path: .
     - name: afficher la valeur recup
       run: cat version.txt

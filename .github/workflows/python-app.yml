@@ -29,7 +29,7 @@ jobs:
        
   dev_env:
     runs-on: ubuntu-latest
-    needs: no_env
+    needs: [ no_env ]
     environment: dev
     steps:
     - name: Valeur environnement
@@ -37,7 +37,7 @@ jobs:
         echo ${{vars.VERSION}}
   prod_env:
     runs-on: ubuntu-latest
-    needs: dev_env
+    needs: [ no_env ]
     environment: prod
     steps:
     - name: Valeur environnement
@@ -45,7 +45,7 @@ jobs:
         echo ${{vars.VERSION}}
   prod_env_2:
     runs-on: ubuntu-latest
-    needs: prod_env
+    needs: [ dev_env, prod_env ]
     environment: prod
     steps:
     - name: Valeur environnement

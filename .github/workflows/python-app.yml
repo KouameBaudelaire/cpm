@@ -19,12 +19,12 @@ jobs:
     steps:
     - name: Valeur environnement
       run: |
-        echo " ${{vars.VERSION}} " > version.txt
+        echo "${{vars.VERSION}}" > version.txt
         
     - name: sauvegarder la valeur de version
       uses: actions/upload-artifact@v4
      with:
-       name: version-no-env
+       name: version no-env
        path: version.txt
        
   dev_env:

@@ -19,7 +19,6 @@ jobs:
     steps:
     - name: Valeur environnement
       run: |
-        echo ${{vars.VERSION}}
         echo ${{vars.VERSION}} > version.txt
         
 #save le contenu de version

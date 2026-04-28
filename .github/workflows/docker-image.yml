@@ -1,7 +1,7 @@
 name: "Docker Build"
 
 on:
-  #workflow_dispatch:
+  workflow_dispatch:
     inputs:
       service:
         description: "Quel service builder ?"
@@ -16,6 +16,7 @@ on:
         required: false
         default: "latest"
   push: 
+    branches: ["main"]
    tags:
     - 'v1.0.0'
 permissions:

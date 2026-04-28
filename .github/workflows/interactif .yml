@@ -1,0 +1,9 @@
+name: "workflows interactif"
+
+on:
+  workflow_dispath:
+    inputs: 
+
+      nom:
+        description: "dewen tryser"
+        required: true

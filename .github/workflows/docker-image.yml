@@ -43,10 +43,10 @@ jobs:
           file: ./services/${{ inputs.service }}/Dockerfile
           push: true
           tags: |
-            ghcr.io/KouameBaudelaire/${{ inputs.service }}:${{ inputs.tag }}
-            ghcr.io/KouameBaudelaire/${{ inputs.service }}:latest
-            ghcr.io/KouameBaudelaire/worker:latest
-            ghcr.io/KouameBaudelaire/frontend:latest
+            ghcr.io/kouamebaudelaire/${{ inputs.service }}:${{ inputs.tag }}
+            ghcr.io/kouamebaudelaire/${{ inputs.service }}:latest
+            ghcr.io/kouamebaudelaire/worker:latest
+            ghcr.io/kouamebaudelaire/frontend:latest
       - id: normalise_image_name
         run: |
           cleaned=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')

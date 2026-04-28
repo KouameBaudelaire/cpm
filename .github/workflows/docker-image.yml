@@ -1,6 +1,10 @@
 name: "Docker Build"
 
 on:
+  workflow_run:
+    workflows: ["python-app.yml"]  
+    types:
+      - completed  
   workflow_dispatch:
     inputs:
       service:

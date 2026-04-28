@@ -39,8 +39,8 @@ jobs:
       - name: Build & Push
         uses: docker/build-push-action@v5
         with:
-          context: ./services/${{ inputs.service }}
-          file: ./services/${{ inputs.service }}/Dockerfile
+          context: ./service/${{ inputs.service }}
+          file: ./service/${{ inputs.service }}/Dockerfile
           push: true
           tags: |
             ghcr.io/kouamebaudelaire/${{ inputs.service }}:${{ inputs.tag }}

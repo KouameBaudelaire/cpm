@@ -32,7 +32,7 @@ jobs:
       - name: creer le repository
         run:  |
           curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/user/repos \
             -d '{
@@ -51,7 +51,7 @@ jobs:
       - name: recuperer la clé publique du repo
         run: |
             curl -X POST \
-              -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+              -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
               -H "Accept: application/vnd.github+json" \
               https://api.github.com/repos/${{ github.actor }}/${{ inputs.nom_repo }}/actions/variables \
               -d '{
@@ -67,7 +67,7 @@ jobs:
         id: cle_public
         run: |
           response=$(curl -s \
-              -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+              -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
               -H "Accept: application/vnd.github+json" \
               https://api.github.com/repos/${{ github.actor }}/${{ inputs.nom_repo }}/actions/secrets/public-key)
   
@@ -82,7 +82,7 @@ jobs:
               base64 -w 0)
   
               curl -X PUT \
-              -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+              -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
               -H "Accept: application/vnd.github+json" \
               https://api.github.com/repos/${{ github.actor }}/${{ inputs.nom_repo }}/actions/secrets/IMAGE_DOCKER \
               -d "{
@@ -100,7 +100,7 @@ jobs:
             " | base64 -w 0)
 
           curl -X PUT \
-            -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/${{ github.actor }}/${{ inputs.nom_repo }}/contents/README.md \
             -d "{

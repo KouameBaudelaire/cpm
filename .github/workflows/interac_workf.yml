@@ -6,7 +6,7 @@ on:
     
     inputs:
       name:
-        description: 'dewen tryser'
+        description: 'nom utilisateur'
         required: true
         type: string
 

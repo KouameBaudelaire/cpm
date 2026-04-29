@@ -107,19 +107,19 @@ jobs:
               \"message\": \"Ajout du README.md\",
               \"content\": \"$contenu\"
             }"
-
-  résumé:                          
+            
+  resume:                          
     runs-on: ubuntu-latest
     needs: creer_readme              
 
     steps:
-
-      - name: Afficher le résumé
+      
+      - name: Afficher le resume
         run: |
-          echo "======================================="
-          echo " Repository créé avec succès !"
-          echo " Nom        : ${{ inputs.nom_repo }}"
-          echo "  Version    : ${{ inputs.version }}"
-          echo " Image      : ${{ inputs.image_docker }}"
-          echo " URL        : https://github.com/${{ github.actor }}/${{ inputs.nom_repo }}"
-          echo "======================================="
+            echo "======================================="
+            echo " Repository créé avec succès !"
+            echo " Nom        : ${{ inputs.nom_repo }}"
+            echo "  Version    : ${{ inputs.version }}"
+            echo " Image      : ${{ inputs.image_docker }}"
+            echo " URL        : https://github.com/${{ github.actor }}/${{ inputs.nom_repo }}"
+            echo "======================================="

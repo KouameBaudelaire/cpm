@@ -32,17 +32,16 @@ jobs:
       - name: creer le repository
         run:  |
         
-            curl -X POST \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2026-03-10" \
-              /orgs/ORG/repos
-              -d '{
-                "name": "'"${{ github.event.inputs.nom_repo }}"'",
-                "description": "Repository créé automatiquement par GitHub Actions",
-                "private": false,
-                "auto_init": true
-              }'
+        
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            /orgs/ORG/repos \
+             -f 'name=oklm' -f 'description=This is your first repository' -f 
+          'homepage=https://github.com' -F "private=false" -F "has_issues=true" -F "has_projects=true" -F 
+          "has_wiki=true"
+              
               
 
   creer_variable:                      

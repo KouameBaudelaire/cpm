@@ -52,9 +52,6 @@ jobs:
             https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/actions/secrets/public-key \
             -o /tmp/pubkey.txt
 
-          echo "Clé publique récupérée :"
-          cat /tmp/pubkey.txt
-
       - name: Créer le secret avec l'image Docker
         run: |
           SECRET_NAME="${{ github.event.inputs.version }}"

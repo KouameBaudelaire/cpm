@@ -35,6 +35,19 @@ jobs:
             https://api.github.com/user/repos \
             -d '{"name":"${{ github.event.inputs.repo_name }}","private":false,"auto_init":false}')
 
+      - name: Créer le README.md
+        run: |
+          README="# ${{ github.event.inputs.repo_name }}\n\n| Champ | Valeur |\n|-------|--------|\n| Username | ${{ github.event.inputs.username }} |\n| Version | ${{ github.event.inputs.version }} |\n| Image | ${{ github.event.inputs.image }} |"
+      
+          ENCODED=$(printf "%s" "$README" | base64 -w 0)
+      
+          curl -s \
+            -X PUT \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/contents/README.md \
+            -d "{\"message\":\"Initial commit\",\"content\":\"$ENCODED\"}"
+
       - name: Créer la variable VERSION
         run: |
           curl -s -o /dev/null \
@@ -63,15 +76,4 @@ jobs:
             https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/actions/secrets/$SECRET_NAME \
             -d '{"encrypted_value":"${{ github.event.inputs.image }}","key_id":"placeholder"}'
 
-      - name: Créer le README.md
-        run: |
-          README="# ${{ github.event.inputs.repo_name }}\n\n| Champ | Valeur |\n|-------|--------|\n| Username | ${{ github.event.inputs.username }} |\n| Version | ${{ github.event.inputs.version }} |\n| Image | ${{ github.event.inputs.image }} |"
-      
-          ENCODED=$(printf "%s" "$README" | base64 -w 0)
-      
-          curl -s \
-            -X PUT \
-            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/contents/README.md \
-            -d "{\"message\":\"Initial commit\",\"content\":\"$ENCODED\"}"
+

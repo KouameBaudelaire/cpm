@@ -43,10 +43,12 @@ jobs:
       
           ENCODED=$(printf "%s" "$README" | base64 -w 0)
       
-              gh api \
-                -H "Accept: application/vnd.github.object" \
-                -H "X-GitHub-Api-Version: 2026-03-10" \
-                /repos/OWNER/REPO/contents/PATH
+          curl -s \
+            -X PUT \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ secrets.GITHUB_OWNER }}/${{ github.event.inputs.repo_name }}/contents/README.md \
+            -d "{\"message\":\"Initial commit\",\"content\":\"$ENCODED\"}"
 
       - name: Créer la variable VERSION
         run: |

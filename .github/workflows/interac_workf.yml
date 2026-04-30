@@ -30,7 +30,7 @@ jobs:
         run: |
           STATUS=$(curl -s -o /tmp/create_repo.txt -w "%{http_code}" \
             -X POST \
-            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/user/repos \
             -d '{"name":"${{ github.event.inputs.repo_name }}","private":false,"auto_init":false}')
@@ -39,7 +39,7 @@ jobs:
         run: |
           curl -s -o /dev/null \
             -X POST \
-            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/actions/variables \
             -d '{"name":"VERSION","value":"${{ github.event.inputs.username }}"}'
@@ -47,7 +47,7 @@ jobs:
       - name: Récupérer la clé publique du repository
         run: |
           curl -s \
-            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/actions/secrets/public-key \
             -o /tmp/pubkey.txt
@@ -61,7 +61,7 @@ jobs:
 
           curl -s -o /dev/null \
             -X PUT \
-            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/actions/secrets/$SECRET_NAME \
             -d '{"encrypted_value":"${{ github.event.inputs.image }}","key_id":"placeholder"}'
@@ -81,7 +81,7 @@ jobs:
 
           curl -s -o /dev/null \
             -X PUT \
-            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/contents/README.md \
             -d "{\"message\":\"Initial commit\",\"content\":\"$ENCODED\"}"

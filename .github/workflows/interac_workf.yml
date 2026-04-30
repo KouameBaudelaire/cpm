@@ -1,126 +1,87 @@
-name: interactif workflow
-
+name: Create Repo and Story
 
 on:
   workflow_dispatch:
-    
     inputs:
-      name:
-        description: 'nom utilisateur'
+      username:
+        description: "Username"
         required: true
         type: string
-
       version:
-        description: "Version du projet (ex: 1.0.0)"
+        description: "Version"
         required: true
         type: string
-        default: "1.0.0"
-
-      image_docker:
-        description: "Nom de l'image Docker"
+      image:
+        description: "Image Docker"
+        required: true
+        type: string
+      repo_name:
+        description: "Nom du repository"
         required: true
         type: string
 
-permissions:
-  contents: write
-  
 jobs:
-  creer_repo:
+  setup:
     runs-on: ubuntu-latest
+
     steps:
 
-      - name: creer le repository
-        run:  |
-        
-        
-          gh api \
-            --method POST \
+      - name: Créer le repository
+        run: |
+          STATUS=$(curl -s -o /tmp/create_repo.txt -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2026-03-10" \
-            /orgs/ORG/repos \
-             -f 'name=oklm' -f 'description=This is your first repository' -f 
-          'homepage=https://github.com' -F "private=false" -F "has_issues=true" -F "has_projects=true" -F 
-          "has_wiki=true"
-              
-              
+            https://api.github.com/user/repos \
+            -d '{"name":"${{ github.event.inputs.repo_name }}","private":false,"auto_init":false}')
 
-  creer_variable:                      
-    runs-on: ubuntu-latest
-    needs: creer_repo  
-  
-    steps: 
-      - name: recuperer la clé publique du repo
+      - name: Créer la variable VERSION
         run: |
-            curl -X POST \
-              -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
-              -H "Accept: application/vnd.github+json" \
-              https://api.github.com/repos/${{ github.actor }}/${{ inputs.nom_repo }}/actions/variables \
-              -d '{
-                "name": "VERSION",
-                "value": "${{ inputs.version }}"
-              }'
-  creer_secret:
-    runs-on: ubuntu-latest
-    needs: creer_variable
-
-    steps:
-      - name: recup la cle public du repo
-        id: cle_public
-        run: |
-          response=$(curl -s \
-              -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
-              -H "Accept: application/vnd.github+json" \
-              https://api.github.com/repos/${{ github.actor }}/${{ inputs.nom_repo }}/actions/secrets/public-key)
-  
-            echo "key_id=$(echo $response | jq -r '.key_id')" >> "$GITHUB_OUTPUT"
-            echo "key=$(echo $response | jq -r '.key')" >> "$GITHUB_OUTPUT"
-  
-      - name: creer le secret IMAGE_DOCKER
-        run: |
-          encrypted=$(echo -n "${{ inputs.image_docker }}" | \
-              openssl rsautl -encrypt -pubin \
-              -inkey <(echo "${{ steps.cle_publique.outputs.key }}" | base64 -d) | \
-              base64 -w 0)
-  
-              curl -X PUT \
-              -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
-              -H "Accept: application/vnd.github+json" \
-              https://api.github.com/repos/${{ github.actor }}/${{ inputs.nom_repo }}/actions/secrets/IMAGE_DOCKER \
-              -d "{
-                \"encrypted_value\": \"$encrypted\",
-                \"key_id\": \"${{ steps.cle_publique.outputs.key_id }}\"
-              }"
-  creer_readme:
-    runs-on: ubuntu-latest
-    needs: creer_secret
-    steps:
-     - name: creer le README.md
-       run: |
-         contenu=$(echo "# ${{ inputs.nom_repo }}
-            Repository créé automatiquement via GitHub Actions.
-            " | base64 -w 0)
-
-          curl -X PUT \
-            -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" \
+          curl -s -o /dev/null \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/${{ github.actor }}/${{ inputs.nom_repo }}/contents/README.md \
-            -d "{
-              \"message\": \"Ajout du README.md\",
-              \"content\": \"$contenu\"
-            }"
-            
-  resume:                          
-    runs-on: ubuntu-latest
-    needs: creer_readme              
+            https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/actions/variables \
+            -d '{"name":"VERSION","value":"${{ github.event.inputs.username }}"}'
 
-    steps:
-      
-      - name: Afficher le resume
+      - name: Récupérer la clé publique du repository
         run: |
-            echo "======================================="
-            echo " Repository créé avec succès !"
-            echo " Nom        : ${{ inputs.nom_repo }}"
-            echo "  Version    : ${{ inputs.version }}"
-            echo " Image      : ${{ inputs.image_docker }}"
-            echo " URL        : https://github.com/${{ github.actor }}/${{ inputs.nom_repo }}"
-            echo "======================================="
+          curl -s \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/actions/secrets/public-key \
+            -o /tmp/pubkey.txt
+
+          echo "Clé publique récupérée :"
+          cat /tmp/pubkey.txt
+
+      - name: Créer le secret avec l'image Docker
+        run: |
+          SECRET_NAME="${{ github.event.inputs.version }}"
+
+          curl -s -o /dev/null \
+            -X PUT \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/actions/secrets/$SECRET_NAME \
+            -d '{"encrypted_value":"${{ github.event.inputs.image }}","key_id":"placeholder"}'
+
+      - name: Créer le README.md
+        run: |
+          README="# ${{ github.event.inputs.repo_name }}
+
+          | Champ    | Valeur                            |
+          |----------|-----------------------------------|
+          | Username | ${{ github.event.inputs.username }} |
+          | Version  | ${{ github.event.inputs.version }}  |
+          | Image    | ${{ github.event.inputs.image }}    |
+          "
+
+          ENCODED=$(echo "$README" | base64 -w 0)
+
+          curl -s -o /dev/null \
+            -X PUT \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.event.inputs.username }}/${{ github.event.inputs.repo_name }}/contents/README.md \
+            -d "{\"message\":\"Initial commit\",\"content\":\"$ENCODED\"}"
